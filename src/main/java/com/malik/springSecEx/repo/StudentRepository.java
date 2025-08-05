@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 // ✅ Imports List interface from Java Collections, used in custom query method below
 import java.util.List;
 
-
 // ✅ This interface is a repository that works with Student entities.
 // ✅ It extends JpaRepository<Student, Integer>:
 //     - Student → the entity class this repo handles

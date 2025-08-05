@@ -14,7 +14,6 @@ public interface UserRepo extends JpaRepository<Users, Integer> {
     //     - <Users, Integer> means this repository works with the Users entity
     //     - and the primary key (ID) type is Integer
 
-
     // ✅ Custom method to find a user by username (used in authentication)
     // Spring Data JPA automatically generates the query based on method name
     Users findByUsername(String username);
