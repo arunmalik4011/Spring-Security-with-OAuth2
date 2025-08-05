@@ -44,18 +44,12 @@
 //        user.setProvider("local");
 //        repo.save(user);
 //        return "redirect:/login?registered";
-//    }
-
-
-
-
-
-
-
+//
 package com.malik.springSecEx.controller;
 
 import com.malik.springSecEx.model.Users;
 import com.malik.springSecEx.repo.UserRepo;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -77,21 +71,33 @@ public class UserController {
         model.addAttribute("user", new Users()); // Bind an empty user object to the form
         return "register"; // Returns register.html
     }
-
     // 📝 Handle form submission
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") Users user) {
+    public String register(@ModelAttribute("user") Users user, HttpSession httpSession) {
         // Encrypt the password before saving
         user.setPassword(encoder.encode(user.getPassword()));
-
+        if(user.getRole() == null) {
+            user.setRole("ROLE_USER");
+        }
         // Indicate that the user is registered via local form (not OAuth)
         user.setProvider("local");
-
         // Save the user to the database
         repo.save(user);
-
+        httpSession.setAttribute("user", user);
         // Redirect to login page with success flag
         return "redirect:/login?registered";
+    }
+
+    @GetMapping("/create-admin-user")
+    public String showAddForm(Model model) {
+        model.addAttribute("user", new Users()); // Binds an empty student object
+        return "create-admin-user"; // Shows add-student.html-
+    }
+
+    @PostMapping("/admin/delete-user")
+    public String deleteUser(@RequestParam("id") Integer userId) {
+        repo.deleteById(userId);
+        return "redirect:/admin/all-users";
     }
 }
 

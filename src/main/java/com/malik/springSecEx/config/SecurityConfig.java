@@ -2,7 +2,10 @@
 package com.malik.springSecEx.config;
 
 // 📥 Required Spring and security imports
+import com.malik.springSecEx.model.Users;
+import com.malik.springSecEx.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -34,6 +37,7 @@ public class SecurityConfig {
 
                 // ✅ Define which URLs are publicly accessible and which require authentication
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers(
                                 "/",                // Root URL
                                 "/register",        // Registration form
@@ -41,8 +45,11 @@ public class SecurityConfig {
                                 "/login-error",     // Error page on failed login
                                 "/oauth2/**",       // OAuth2 URLs (Google/GitHub)
                                 "/css/**"           // Public CSS files
+
+
                         ).permitAll()          // Allow access to these without login
                         .anyRequest().authenticated()  // All other URLs require authentication
+
                 )
 
                 // 🧠 Configure session management
@@ -99,4 +106,28 @@ public class SecurityConfig {
 
         return provider;
     }
-}
+
+        @Bean
+        public CommandLineRunner createDefaultAdmin(UserRepo repo, BCryptPasswordEncoder encoder) {
+            return args -> {
+                String username = "admin";
+                String password = "admin"; // Change this in production
+
+                // Check if admin already exists
+                Users existingAdmin = repo.findByUsername(username);
+                if (existingAdmin == null) {
+                    Users admin = new Users();
+                    admin.setUsername(username);
+                    admin.setPassword(encoder.encode(password));
+                    admin.setProvider("local");
+                    admin.isEnabled(true);
+                    admin.setRole("ADMIN");
+
+                    repo.save(admin);
+                    System.out.println("✅ Default admin user created with email: " + username);
+                } else {
+                    System.out.println("ℹ️ Admin user already exists.");
+                }
+            };
+        }
+    }

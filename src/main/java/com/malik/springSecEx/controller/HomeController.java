@@ -1,6 +1,7 @@
 package com.malik.springSecEx.controller;
 
 // Importing annotations and classes for Spring MVC and security
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,9 @@ import org.springframework.ui.Model;
 // Marking this class as a Spring MVC controller that returns view names
 @Controller
 public class HomeController {
+
+//    @Autowired
+//    UserDetailsService userDetailsService;
 
     // ⬅️ Handles both "/" and "/"
     @GetMapping({"/", ""})
@@ -40,6 +44,7 @@ public class HomeController {
     // This method adds user info to the model to be displayed on the home page
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal OidcUser principal, Model model) {
+
         // If user logged in with OAuth2 (Google/GitHub), fetch and display user details
         if (principal != null) {
             model.addAttribute("name", principal.getFullName());   // User's full name

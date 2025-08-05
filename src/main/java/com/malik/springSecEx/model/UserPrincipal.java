@@ -7,30 +7,28 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority; // A 
 import org.springframework.security.core.userdetails.UserDetails;       // Core interface representing a user in Spring Security
 
 import java.util.Collection;
-import java.util.Collections;  // Utility class for creating singleton lists
+
+import java.util.List;
 
 
 // ✅ Custom implementation of Spring Security's UserDetails interface
 // This class wraps your Users entity and adapts it to Spring Security's user model
 public class UserPrincipal implements UserDetails {
 
-
     // ✅ Composition: holds a reference to your Users entity
-    private Users users;
+    private final Users users;
 
     // ✅ Constructor: initializes the UserPrincipal with a Users object
     public UserPrincipal(Users users) {
         this.users = users;
     }
 
-
     // ✅ Returns the authorities (roles) granted to the user
     // In this case, a single hardcoded role "USER" is returned
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + users.getRole()));
     }
-
 
     // ✅ Returns the encrypted password from the Users entity
     @Override
@@ -68,11 +66,4 @@ public class UserPrincipal implements UserDetails {
         return true; // account is active/enabled
     }
 }
-
-
-    // ✅ This method is unused in your current logic but exists here as a placeholder
-    // You can remove or implement it based on how you want to handle provider updates
-//    public void setProvider(String local) {
-        // no logic currently
-//    }
 

@@ -87,52 +87,22 @@
 
 
         <div class="row">
-            <!-- ✅ Login Form -->
             <div class="col-md-6 border-end">
-                <h5 class="mb-3">Login (Local User)</h5>
+                <h5 class="mb-3">Login (Admin User)</h5>
 
-                <form th:action="@{/login}" method="post">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" id="username" class="form-control" required>
+                    <div class="text-center">
+                        <br/>
+                        <a href="/admin/all-users" class="btn btn-primary">View All Users</a>
                     </div>
-
-                    <div class="form-group">
-                        <label for="password" class="mt-3">Password</label>
-                        <input type="password" name="password" id="password" class="form-control" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary mt-4">🔓 Login</button>
-
-
-                </form>
-
-                <div class="text-center">
-                    <a th:href="@{/admin}" class="btn btn-lg btn-success mt-4">🔓 Go to Admin Panel</a>
-                </div>
 
                 <p class="form-text text-center mt-3">New user?
-                    <a th:href="@{/register}">Register here</a>
+                    <a th:href="@{/admin/create-admin-user}">Register here</a>
                 </p>
             </div>
 
-            <!-- 🌐 OAuth2 Login -->
-            <div class="col-md-6 text-center">
-                <h5 class="mb-3">Login with</h5>
-
-                <div class="oauth-buttons">
-                    <a href="/oauth2/authorization/google" class="btn btn-danger">
-                        <i class="bi bi-google"></i> Google
-                    </a>
-                    <a href="/oauth2/authorization/github" class="btn btn-dark">
-                        <i class="bi bi-github"></i> GitHub
-                    </a>
-
-                </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
 </html>
